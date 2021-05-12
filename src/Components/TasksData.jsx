@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from '../Fonts/TaskElement.sass'
 import Task from './Task';
+import TaskList from './TaskList';
 
 function TasksData(props){
     
@@ -35,11 +36,7 @@ function TasksData(props){
                   <h2>Текущие задания</h2>
                   <button>Добавить</button>
                 </div>
-                <ul class="task__list">
-                    {tasks.map(task => (
-                        <Task item={task}/>
-                    ))}
-                </ul>
+                <TaskList tasks={tasks}/>
               </div>
             </div>         
         </>
