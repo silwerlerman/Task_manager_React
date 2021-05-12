@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import styles from '../Fonts/TaskElement.sass'
 
 function TasksData(props){
     
@@ -30,7 +31,7 @@ function TasksData(props){
             <div className="app">
                 <ul>
                     {tasks.map(task => (
-                        <li key={task.id}>{task.title}</li>
+                        <div class="task">{task.title}</div> 
                     ))}
                 </ul>
             </div>         
