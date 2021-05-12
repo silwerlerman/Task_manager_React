@@ -9,7 +9,7 @@ function TaskList({tasks, completedTasks}){
     
     return (
         <div className={cn(styles.list)}>
-            {arr.map(task => <Task item={task}/>)}
+            {arr.map(task => <Task key={task.id} task={task}/>)}
         </div>
     );
 }
