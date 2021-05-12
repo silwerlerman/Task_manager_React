@@ -29,11 +29,26 @@ function TasksData(props){
     return (
         <>
             <div className="app">
-                <ul>
+              <div class="list">
+                <div class="list__header">
+                  <h2>Текущие задания</h2>
+                  <button>Добавить</button>
+                </div>
+                <ul class="task__list">
                     {tasks.map(task => (
-                        <div class="task">{task.title}</div> 
+                        <div class="task">
+                          <div>
+                            <input type="checkbox"/>
+                            <input type="text" value={task.title} readOnly="true"/>
+                          </div>
+                          <div>
+                            <button>Редактировать</button>
+                            <button>Удалить</button>
+                          </div>
+                        </div> 
                     ))}
                 </ul>
+              </div>
             </div>         
         </>
     );
