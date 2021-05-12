@@ -6,7 +6,7 @@ function Task({task}){
     return (
         <div className={cn(styles.item,{[styles.completed]:task.completed},{[styles.todo]:!task.completed})}>
             <div>
-                <input className={cn(styles.checkbox)} type="checkbox" defaultChecked={task.completed}/>
+                <input className={cn(styles.checkbox)} type="checkbox" defaultChecked={task.completed} disabled={task.completed}/>
                 <input className={cn(styles.input,{[styles.inputLineThrough]:task.completed})} type="text" value={task.title} readOnly="true"/>
             </div>
             <div>
