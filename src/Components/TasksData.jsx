@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import styles from '../Fonts/TaskElement.sass'
+import Task from './Task';
 
 function TasksData(props){
     
@@ -36,16 +37,7 @@ function TasksData(props){
                 </div>
                 <ul class="task__list">
                     {tasks.map(task => (
-                        <div class="task">
-                          <div>
-                            <input type="checkbox"/>
-                            <input type="text" value={task.title} readOnly="true"/>
-                          </div>
-                          <div>
-                            <button>Редактировать</button>
-                            <button>Удалить</button>
-                          </div>
-                        </div> 
+                        <Task item={task}/>
                     ))}
                 </ul>
               </div>
