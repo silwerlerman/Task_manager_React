@@ -25,7 +25,7 @@ const TaskData = memo(() => {
             setTasks(prev =>
                 [
                     ...prev,
-                    newTask
+                    response.data
                 ]
             );
         })
@@ -52,6 +52,7 @@ const TaskData = memo(() => {
         })
         .then(response => {
             console.log(response.data)
+            debugger
             if(!task.id) return;
             setTasks(prev =>
                 prev.filter(curr => curr.id !== task.id)
