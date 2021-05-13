@@ -4,13 +4,15 @@ import TaskForm from './TaskForm';
 
 const TaskData = memo(() => {
 
-    const [error, setError] = useState(null);
     const [tasks, setTasks] = useState([]);
   
     useEffect(() => {
         axios.get("http://185.246.66.84:3000/llerman/tasks")
-        .then(res => setTasks(res.data))
-        .catch(err => setError(err))
+        .then(response => {
+            console.log(response.data)
+            setTasks(response.data)
+        })
+        .catch(error => console.log(error))
     },[])
     
     const addTask = useCallback((req) => {

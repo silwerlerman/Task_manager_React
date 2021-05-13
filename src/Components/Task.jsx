@@ -1,7 +1,8 @@
 import cn from "class-names"
 import styles from "../Fonts/Task.module.sass"
+import { memo } from 'react';
 
-function Task({task, removeButtonClick, onStatusChange}){
+const Task = memo(({task, removeButtonClick, onStatusChange}) => {
     
     return (
         <div className={cn(styles.item,{[styles.completed]:task.completed},{[styles.todo]:!task.completed})}>
@@ -19,6 +20,6 @@ function Task({task, removeButtonClick, onStatusChange}){
         </div>
     );
     
-}
+})
 
 export default Task;
