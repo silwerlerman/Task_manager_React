@@ -1,20 +1,26 @@
 import axios from 'axios'
-import { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import AppContext from '../AppContext';
 import TaskForm from './TaskForm';
 
-const TaskData = memo(() => {
+function TaskData(){
 
     const [tasks, setTasks] = useState([]);
-  
-    useEffect(() => {
+
+    function getData(){
+        
         axios.get("http://185.246.66.84:3000/llerman/tasks")
         .then(response => {
             console.log(response.data)
             setTasks(response.data)
         })
         .catch(error => console.log(error))
+    }
+
+    useEffect(()=>{
+        getData();
     },[])
-    
+
     const addTask = useCallback((req) => {
         const newTask = {
             completed: false,
@@ -53,22 +59,23 @@ const TaskData = memo(() => {
             sequence: task.sequence           
         })
         .then(response => {
-            console.log(response.data)
-            debugger
-            if(!task.id) return;
-            setTasks(prev =>
-                prev.filter(curr => curr.id !== task.id)
-            );
+            console.log(response.data);
+            setTasks(prev =>{
+                return [
+                    ...prev.filter(curr => curr.id !== task.id),
+                    response.data
+                ]
+            });
         })
         .catch(error => console.log(error));
     },[setTasks])    
 
     return (
-        <>
-            <TaskForm tasksArr={tasks} showCompletedTasks={true} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
-            <TaskForm tasksArr={tasks} showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
-        </>
+        <AppContext.Provider value={[tasks, setTasks]}>
+            <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
+            <TaskForm showCompletedTasks={true} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
+        </AppContext.Provider>
       );
-})
+}
 
 export default TaskData;

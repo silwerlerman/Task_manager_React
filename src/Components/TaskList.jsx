@@ -1,12 +1,25 @@
 import cn from "class-names"
-import { useEffect } from "react";
+import { useContext, useMemo } from "react";
 import styles from "../Fonts/TaskList.module.sass"
 import Task from "./Task";
+import AppContext from '../AppContext';
 
-function TaskList({tasks, completedTasks, removeButtonClick, onStatusChange}){
+function TaskList({completedTasks, removeButtonClick, onStatusChange}){
 
-    var arr = !completedTasks ? tasks.filter(task => task.completed) : tasks.filter(task =>!task.completed); 
-    
+    const [tasks] = useContext(AppContext);
+
+    const arr = useMemo(() => {
+        if (tasks.length !== 0) {
+            if (completedTasks){
+                return tasks.filter(task => task.completed);
+            }
+            else{
+                return tasks.filter(task =>!task.completed)
+            }
+        }
+        else return [];
+    },[tasks]) 
+
     return (
         <div className={cn(styles.list)}>
             {arr.map(task => <Task key={task.id} task={task} removeButtonClick={removeButtonClick} onStatusChange={onStatusChange}/>)}
