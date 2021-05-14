@@ -10,12 +10,8 @@ function TaskList({completedTasks, removeButtonClick, onStatusChange}){
 
     const arr = useMemo(() => {
         if (tasks.length !== 0) {
-            if (completedTasks){
-                return tasks.filter(task => task.completed);
-            }
-            else{
-                return tasks.filter(task =>!task.completed)
-            }
+            if (completedTasks) return tasks.filter(task => task.completed);
+            else return tasks.filter(task =>!task.completed);
         }
         else return [];
     },[tasks]) 
