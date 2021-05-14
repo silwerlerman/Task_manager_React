@@ -9,16 +9,17 @@ const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange}) => 
 
     return (
         <div className={cn(styles.item,{[styles.completed]:task.completed},{[styles.todo]:!task.completed})}>
-            <div>
+            <div className={cn(styles.items)}>
                 <input className={cn(styles.checkbox)} type="checkbox" defaultChecked={task.completed} disabled={task.completed} onChange={() => onStatusChange(task)}/>
-                <input className={cn({[styles.input]:readOnly},{[styles.inputLineThrough]:task.completed})} type="text" placeholder={title} readOnly={readOnly} onChange={e => title = e.target.value}/>
+                {readOnly && <p className={cn(styles.text,{[styles.inputLineThrough]:task.completed})}>{title}</p>}
+                {!task.completed && !readOnly && <input className={cn({[styles.input]:readOnly})} type="text" placeholder={title} onChange={e => title = e.target.value}/>}
             </div>
             <div>
                 {task.completed && <button onClick={() => onStatusChange(task)}>Восстановить</button>}
                 {!task.completed && <button onClick={() => {
                     if (readOnly) setReadOnly(false);
                     else {
-                        onTitleChange(task, title);
+                        if (title !== "") onTitleChange(task, title);
                         setReadOnly(true);
                     }
                 }}>{readOnly ? "Редактировать" : "Сохранить"}</button>}
