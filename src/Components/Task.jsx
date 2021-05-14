@@ -30,4 +30,6 @@ const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange}) => 
     
 })
 
+Task.displayName = "Task"
+
 export default Task;
