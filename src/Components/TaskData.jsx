@@ -8,10 +8,8 @@ function TaskData(){
     const [tasks, setTasks] = useState([]);
 
     function getData(){
-        
         axios.get("http://185.246.66.84:3000/llerman/tasks")
         .then(response => {
-            console.log(response.data)
             setTasks(response.data)
         })
         .catch(error => console.log(error))
@@ -29,7 +27,6 @@ function TaskData(){
         }
         axios.post("http://185.246.66.84:3000/llerman/tasks", newTask)
         .then(response => {
-            console.log(response.data)
             setTasks(prev =>
                 [
                     ...prev,
@@ -43,7 +40,6 @@ function TaskData(){
     const removeTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/tasks/" + id)
         .then(response => {
-            console.log(response.data)
             if(!id) return;
             setTasks(prev =>
                 prev.filter(curr => curr.id !== id)
@@ -59,7 +55,6 @@ function TaskData(){
             sequence: task.sequence           
         })
         .then(response => {
-            console.log(response.data);
             setTasks(prev =>{
                 return [
                     ...prev.filter(curr => curr.id !== task.id),
@@ -68,11 +63,31 @@ function TaskData(){
             });
         })
         .catch(error => console.log(error));
+    },[setTasks])
+    
+    const renameTask = useCallback((task, newTitle) => {
+        if (task.title !== newTitle){
+            axios.put("http://185.246.66.84:3000/llerman/tasks/" + task.id, {
+                completed: task.completed,
+                title: newTitle,
+                sequence: task.sequence           
+            })
+            .then(response => {
+                setTasks(prev =>{
+                    return [
+                        ...prev.filter(curr => curr.id !== task.id),
+                        response.data
+                    ]
+                });
+            })
+            .catch(error => console.log(error));
+        }
+        
     },[setTasks])    
 
     return (
         <AppContext.Provider value={[tasks, setTasks]}>
-            <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
+            <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask} onTitleChange={renameTask}/>
             <TaskForm showCompletedTasks={true} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
         </AppContext.Provider>
       );
