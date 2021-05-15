@@ -2,13 +2,13 @@ import cn from "class-names"
 import { useContext, useMemo } from "react";
 import styles from "../Fonts/TaskList.module.sass"
 import Task from "./Task";
-import AppContext from '../AppContext';
+import TaskContext from '../TaskContext';
 
 function TaskList({completedTasks, removeButtonClick, onStatusChange, onTitleChange}){
 
-    const [tasks] = useContext(AppContext);
+    const [tasks] = useContext(TaskContext);
 
-    const arr = useMemo(() => {
+    const filteredArr = useMemo(() => {
         if (tasks.length !== 0) {
             if (completedTasks) return tasks.filter(task => task.completed);
             else return tasks.filter(task =>!task.completed);
@@ -18,7 +18,7 @@ function TaskList({completedTasks, removeButtonClick, onStatusChange, onTitleCha
 
     return (
         <div className={cn(styles.list)}>
-            {arr.map(task => <Task key={task.id} task={task} removeButtonClick={removeButtonClick} onStatusChange={onStatusChange} onTitleChange={onTitleChange}/>)}
+            {filteredArr.map(task => <Task key={task.id} task={task} removeButtonClick={removeButtonClick} onStatusChange={onStatusChange} onTitleChange={onTitleChange}/>)}
         </div>
     );
 }

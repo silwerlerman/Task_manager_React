@@ -1,7 +1,7 @@
 import TaskList from "./TaskList";
 import styles from "../Fonts/TaskForm.module.sass"
 import cn from "class-names"
-import AppContext from '../AppContext';
+import AppContext from '../TaskContext';
 import { useContext } from 'react';
 
 function TaskForm({showCompletedTasks, addButtonClick, removeButtonClick, onStatusChange, onTitleChange}){  

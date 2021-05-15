@@ -1,22 +1,26 @@
 import axios from 'axios'
 import { useState, useEffect, useCallback } from 'react';
-import AppContext from '../AppContext';
+import TaskContext from '../TaskContext';
+import SubTaskContext from '../SubTaskContext';
 import TaskForm from './TaskForm';
 
 function TaskData(){
 
     const [tasks, setTasks] = useState([]);
+    const [subTasks, setSubTasks] = useState([]);
 
-    function getData(){
+    useEffect(()=>{
         axios.get("http://185.246.66.84:3000/llerman/tasks")
         .then(response => {
             setTasks(response.data)
         })
         .catch(error => console.log(error))
-    }
 
-    useEffect(()=>{
-        getData();
+        axios.get("http://185.246.66.84:3000/llerman/subtasks")
+        .then(response => {
+            setSubTasks(response.data)
+        })
+        .catch(error => console.log(error))
     },[])
 
     const addTask = useCallback((req) => {
@@ -86,10 +90,12 @@ function TaskData(){
     },[setTasks])    
 
     return (
-        <AppContext.Provider value={[tasks, setTasks]}>
-            <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask} onTitleChange={renameTask}/>
-            <TaskForm showCompletedTasks={true} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
-        </AppContext.Provider>
+        <TaskContext.Provider value={[tasks, setTasks]}>
+            <SubTaskContext.Provider value={[subTasks, setSubTasks]}>
+                <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask} onTitleChange={renameTask}/>
+                <TaskForm showCompletedTasks={true} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
+            </SubTaskContext.Provider>
+        </TaskContext.Provider>
       );
 }
 
