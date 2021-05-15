@@ -23,11 +23,17 @@ function TaskData(){
         .catch(error => console.log(error))
     },[])
 
-    const addTask = useCallback((req) => {
+    const addTask = useCallback(() => {
+        
+        function calculateTaskSequence(){
+            var remTasks = tasks.filter(task => !task.completed);
+            return remTasks === undefined ? 1 : remTasks.length + 1;
+        }
+
         const newTask = {
             completed: false,
-            title: "Task " + (req + 1),
-            sequence: req + 1
+            title: tasks.length === 0 ? "Task 1" : "Task " + (tasks.length + 1),
+            sequence: calculateTaskSequence()
         }
         axios.post("http://185.246.66.84:3000/llerman/tasks", newTask)
         .then(response => {
@@ -39,7 +45,7 @@ function TaskData(){
             );
         })
         .catch(error => console.log(error));
-    },[setTasks]) 
+    },[tasks, setTasks]) 
 
     const addSubTask = useCallback((id) => {
 
@@ -64,12 +70,11 @@ function TaskData(){
             );
         })
         .catch(error => console.log(error));
-    },[setSubTasks])
+    },[subTasks, setSubTasks])
 
     const removeTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/tasks/" + id)
         .then(response => {
-            if(!id) return;
             setTasks(prev =>
                 prev.filter(curr => curr.id !== id)
             );
@@ -80,7 +85,6 @@ function TaskData(){
     const removeSubTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/subtasks/" + id)
         .then(response => {
-            if(!id) return;
             setSubTasks(prev =>
                 prev.filter(curr => curr.id !== id)
             );
