@@ -4,7 +4,7 @@ import { memo, useState,useContext } from 'react';
 import SubTaskList from "./SubTaskList";
 import SubTaskContext from '../SubTaskContext';
 
-const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange}) => {
+const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange, addSubTask, removeSubTask}) => {
     
     var title = task.title;
     const [readOnly, setReadOnly] = useState(true);
@@ -33,14 +33,14 @@ const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange}) => 
                             setReadOnly(true);
                         }
                     }}>{readOnly ? "Редактировать" : "Сохранить"}</button>}
-                    {!task.completed && <button onClick={() => {}}>+ Подзадача</button>}
+                    {!task.completed && <button onClick={() => addSubTask(task.id)}>+ Подзадача</button>}
                     {!task.completed && <button onClick={() => removeButtonClick(task.id)}>Удалить</button>}
                 </div>
                     
             </div>
             <div>
                 <div>
-                    {hasSubTasks() && <SubTaskList taskId={task.id} taskCompleted={task.completed}/>}
+                    {hasSubTasks() && <SubTaskList taskId={task.id} taskCompleted={task.completed} removeSubTask={removeSubTask}/>}
                 </div>
             </div>           
         </div>

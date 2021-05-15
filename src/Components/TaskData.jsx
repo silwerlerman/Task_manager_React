@@ -41,6 +41,31 @@ function TaskData(){
         .catch(error => console.log(error));
     },[setTasks]) 
 
+    const addSubTask = useCallback((id) => {
+
+        function calculateSubTaskSequence(){
+            var remSubTasks = subTasks.filter(subTask => subTask.taskId === id);
+            return remSubTasks === undefined ? 1 : remSubTasks.length + 1;
+        }
+
+        const newSubTask = {
+            completed: false,
+            sequence: calculateSubTaskSequence(),
+            taskId: id,
+            title: "Subtask for Task" + id
+        }
+        axios.post("http://185.246.66.84:3000/llerman/subtasks", newSubTask)
+        .then(response => {
+            setSubTasks(prev =>
+                [
+                    ...prev,
+                    response.data
+                ]
+            );
+        })
+        .catch(error => console.log(error));
+    },[setSubTasks])
+
     const removeTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/tasks/" + id)
         .then(response => {
@@ -52,6 +77,17 @@ function TaskData(){
         .catch(error => console.log(error));
     },[setTasks])
     
+    const removeSubTask = useCallback((id) => {
+        axios.delete("http://185.246.66.84:3000/llerman/subtasks/" + id)
+        .then(response => {
+            if(!id) return;
+            setSubTasks(prev =>
+                prev.filter(curr => curr.id !== id)
+            );
+        })
+        .catch(error => console.log(error));
+    },[setSubTasks])    
+
     const checkTask = useCallback((task) => {
         axios.put("http://185.246.66.84:3000/llerman/tasks/" + task.id, {
             completed: !task.completed,
@@ -92,7 +128,7 @@ function TaskData(){
     return (
         <TaskContext.Provider value={[tasks, setTasks]}>
             <SubTaskContext.Provider value={[subTasks, setSubTasks]}>
-                <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask} onTitleChange={renameTask}/>
+                <TaskForm showCompletedTasks={false} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask} onTitleChange={renameTask} addSubTask={addSubTask} removeSubTask={removeSubTask}/>
                 <TaskForm showCompletedTasks={true} addButtonClick={addTask} removeButtonClick={removeTask} onStatusChange={checkTask}/>
             </SubTaskContext.Provider>
         </TaskContext.Provider>

@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import cn from "class-names"
 import styles from "../Fonts/Task.module.sass"
 
-const SubTask = memo(({subTask, taskCompleted}) => {
+const SubTask = memo(({subTask, taskCompleted, removeSubTask}) => {
     
     var title = subTask.title;
     const [readOnly, setReadOnly] = useState(true);
@@ -22,7 +22,7 @@ const SubTask = memo(({subTask, taskCompleted}) => {
                         setReadOnly(true);
                     }
                 }}>{readOnly ? "Редактировать" : "Сохранить"}</button>}
-                {!taskCompleted && <button onClick={() => {}}>Удалить</button>}
+                {!taskCompleted && <button onClick={() => removeSubTask(subTask.id)}>Удалить</button>}
             </div>
         </div>
     );

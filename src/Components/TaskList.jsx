@@ -4,7 +4,7 @@ import styles from "../Fonts/TaskList.module.sass"
 import Task from "./Task";
 import TaskContext from '../TaskContext';
 
-function TaskList({completedTasks, removeButtonClick, onStatusChange, onTitleChange}){
+function TaskList({completedTasks, removeButtonClick, onStatusChange, onTitleChange, addSubTask, removeSubTask}){
 
     const [tasks] = useContext(TaskContext);
 
@@ -18,7 +18,7 @@ function TaskList({completedTasks, removeButtonClick, onStatusChange, onTitleCha
 
     return (
         <div className={cn(styles.list)}>
-            {filteredArr.map(task => <Task key={task.id} task={task} removeButtonClick={removeButtonClick} onStatusChange={onStatusChange} onTitleChange={onTitleChange}/>)}
+            {filteredArr.map(task => <Task key={task.id} task={task} removeButtonClick={removeButtonClick} onStatusChange={onStatusChange} onTitleChange={onTitleChange} addSubTask={addSubTask} removeSubTask={removeSubTask}/>)}
         </div>
     );
 }
