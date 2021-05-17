@@ -5,7 +5,7 @@ import SubTaskContext from '../SubTaskContext';
 import cn from "class-names"
 import SubTask from "./SubTask";
 
-function SubTaskList({taskId, taskCompleted, removeSubTask}){
+function SubTaskList({taskId, taskCompleted, removeSubTask, renameSubTask, checkSubTask}){
     
     const [tasks] = useContext(TaskContext);
     const [subTasks] = useContext(SubTaskContext);
@@ -20,7 +20,7 @@ function SubTaskList({taskId, taskCompleted, removeSubTask}){
 
     return (
         <div className={cn(styles.list)}>
-            {filteredArr.map(subTask => <SubTask key={subTask.id} subTask={subTask} taskCompleted={taskCompleted} removeSubTask={removeSubTask}/>)}
+            {filteredArr.map(subTask => <SubTask key={subTask.id} subTask={subTask} taskCompleted={taskCompleted} removeSubTask={removeSubTask} renameSubTask={renameSubTask} checkSubTask={checkSubTask}/>)}
         </div>
     );
 }

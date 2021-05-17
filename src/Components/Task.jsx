@@ -4,7 +4,7 @@ import { memo, useState,useContext } from 'react';
 import SubTaskList from "./SubTaskList";
 import SubTaskContext from '../SubTaskContext';
 
-const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange, addSubTask, removeSubTask}) => {
+const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange, addSubTask, removeSubTask, renameSubTask, checkSubTask}) => {
     
     var title = task.title;
     const [readOnly, setReadOnly] = useState(true);
@@ -40,7 +40,7 @@ const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange, addS
             </div>
             <div>
                 <div>
-                    {hasSubTasks() && <SubTaskList taskId={task.id} taskCompleted={task.completed} removeSubTask={removeSubTask}/>}
+                    {hasSubTasks() && <SubTaskList taskId={task.id} taskCompleted={task.completed} removeSubTask={removeSubTask} renameSubTask={renameSubTask} checkSubTask={checkSubTask}/>}
                 </div>
             </div>           
         </div>
