@@ -3,7 +3,6 @@ import styles from "../Fonts/TaskForm.module.sass"
 import cn from "class-names"
 
 function TaskForm({showCompletedTasks, addButtonClick, removeButtonClick, onStatusChange, onTitleChange, addSubTask, removeSubTask, renameSubTask, checkSubTask}){  
-    debugger
     return (
         <div className={cn(styles.form)}>
             <div class="list__header">
