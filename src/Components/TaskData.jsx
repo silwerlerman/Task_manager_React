@@ -75,12 +75,12 @@ function TaskData(){
     const removeTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/tasks/" + id)
         .then(response => {
-            setTasks(prev =>
-                prev.filter(curr => curr.id !== id)
-            );
+            setTasks(prev => prev.filter(curr => curr.id !== id));
+            subTasks.filter(subTask => subTask.taskId === id)
+                .forEach(subTask => removeSubTask(subTask.id));
         })
         .catch(error => console.log(error));
-    },[setTasks])
+    },[subTasks, setTasks])
     
     const removeSubTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/subtasks/" + id)
