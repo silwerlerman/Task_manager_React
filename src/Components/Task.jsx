@@ -11,7 +11,7 @@ const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange, addS
     const [subTasks] = useContext(SubTaskContext);
 
     function hasSubTasks(){
-        var arr = subTasks.filter(subTask => subTask.taskId === task.id);
+        let arr = subTasks.filter(subTask => subTask.taskId === task.id);
         const result = arr.length !== 0 ? true : false
         return result;
     }
@@ -35,8 +35,8 @@ const Task = memo(({task, removeButtonClick, onStatusChange, onTitleChange, addS
                     }}>{readOnly ? "Редактировать" : "Сохранить"}</button>}
                     {!task.completed && <button onClick={() => addSubTask(task.id)}>+ Подзадача</button>}
                     {!task.completed && <button onClick={() => removeButtonClick(task.id)}>Удалить</button>}
-                </div>
-                    
+                    <h5>Seq:{task.sequence}</h5>
+                </div> 
             </div>
             <div>
                 <div>
