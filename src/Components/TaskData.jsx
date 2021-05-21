@@ -178,43 +178,47 @@ function TaskData(){
 
     const changeTaskSequence = useCallback((dndResult) =>{
 
-        const sourceTask = tasks.filter(task => task.sequence === dndResult.source.index);
-        const destinationTask = tasks.filter(task => task.sequence === dndResult.destination.index);
-
-        let firstTaskToChange = {
-            completed: sourceTask[0].completed,
-            title: sourceTask[0].title,
-            sequence: dndResult.destination.index             
+        let taskToChange = {};
+        let tasksToChange = [];
+        
+        if (dndResult.source.index < dndResult.destination.index){
+            for (let i=dndResult.source.index-1; i<=dndResult.destination.index-1; ++i){
+                taskToChange = tasks[i];
+                if (taskToChange.sequence === dndResult.source.index){                   
+                    taskToChange.sequence = dndResult.destination.index;
+                    tasksToChange.push(taskToChange);
+                }
+                else if (taskToChange.sequence <= dndResult.destination.index){
+                    taskToChange.sequence = i;
+                    tasksToChange.push(taskToChange);
+                }
+            }
+        }
+        else{
+            for (let i=dndResult.destination.index-1; i<=dndResult.source.index-1; ++i){
+                taskToChange = tasks[i];
+                if (taskToChange.sequence === dndResult.source.index){
+                    taskToChange.sequence = dndResult.destination.index;
+                    tasksToChange.push(taskToChange);
+                }
+                else if (taskToChange.sequence <= dndResult.source.index){
+                    taskToChange.sequence = i+2;
+                    tasksToChange.push(taskToChange);
+                }
+            }
         }
 
-        let secondTaskToChange = {
-            completed: destinationTask[0].completed,
-            title: destinationTask[0].title,
-            sequence: dndResult.source.index
-        }
-
-        setTasks(prev =>{
-            return [
-                ...prev.filter(curr => curr.id !== sourceTask[0].id && curr.id !== destinationTask[0].id),
-                firstTaskToChange,
-               secondTaskToChange
-            ].sort((a,b) => a.sequence - b.sequence);
-        });    
-        //axios.put("http://185.246.66.84:3000/llerman/tasks/" + sourceTask[0].id, firstTaskToChange)
-        //.then(response => {
-        //    axios.put("http://185.246.66.84:3000/llerman/tasks/" + destinationTask[0].id, secondTaskToChange)
-        //    .then(response => {
-        //        setTasks(prev =>{
-        //            return [
-        //                ...prev.filter(curr => curr.id !== sourceTask[0].id && curr.id !== destinationTask[0].id),
-        //                firstTaskToChange,
-        //                secondTaskToChange
-        //            ].sort((a,b) => a.sequence - b.sequence);
-        //        });                
-        //    })
-        //    .catch(error => console.log(error))
-        //})
-        //.catch(error => console.log(error))
+        tasksToChange.forEach(task => {
+            axios.put("http://185.246.66.84:3000/llerman/tasks/" + task.id, {
+                ...task           
+            })
+        })
+        setTasks(prev => prev.map(item => {
+            if (tasksToChange.some(elem => elem.id === item.id)){
+                return {...item, sequence: tasksToChange.filter(task => task.id === item.id)[0].sequence}
+            }
+            return item;
+        }).sort((a,b) => a.sequence - b.sequence));
     },[tasks, setTasks])
 
     return (
