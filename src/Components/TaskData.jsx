@@ -72,17 +72,28 @@ function TaskData(){
         })
         .catch(error => console.log(error));
     },[subTasks, setSubTasks])
-
+    
     const removeTask = useCallback((id) => {
+
+        let tasksToChange = tasks.filter(task => task.sequence > tasks.filter(task => task.id === id)[0].sequence);
+        
+        if (tasksToChange) {
+            tasksToChange.forEach(task => {
+                task.sequence -= 1;
+                axios.put("http://185.246.66.84:3000/llerman/tasks/" + task.id, {
+                    ...task           
+                })
+            })
+        }
         axios.delete("http://185.246.66.84:3000/llerman/tasks/" + id)
         .then(response => {
-            setTasks(prev =>
-                prev.filter(curr => curr.id !== id)
-            );
+            setTasks(prev => prev.filter(curr => curr.id !== id));
+            subTasks.filter(subTask => subTask.taskId === id)
+                .forEach(subTask => removeSubTask(subTask.id));
         })
         .catch(error => console.log(error));
-    },[setTasks])
-    
+    },[tasks, subTasks, setTasks])
+
     const removeSubTask = useCallback((id) => {
         axios.delete("http://185.246.66.84:3000/llerman/subtasks/" + id)
         .then(response => {
