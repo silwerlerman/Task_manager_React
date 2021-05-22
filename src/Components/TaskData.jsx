@@ -89,7 +89,7 @@ function TaskData(){
         .then(response => {
             setTasks(prev => prev.filter(curr => curr.id !== id));
             subTasks.filter(subTask => subTask.taskId === id)
-                .forEach(subTask => removeSubTask(subTask.id));
+                .forEach(subTask => axios.delete("http://185.246.66.84:3000/llerman/subtasks/" + subTask.id));
         })
         .catch(error => console.log(error));
     },[tasks, subTasks, setTasks])
